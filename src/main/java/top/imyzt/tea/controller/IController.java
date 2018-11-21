@@ -12,13 +12,9 @@ import java.io.Serializable;
  * Created by imyzt on 2018/11/21 14:54
  * <PK> 主键泛型
  * <T> 实体泛型
+ * <S> Service Bean 泛型
  */
-public interface IController<PK extends Serializable, T> {
-
-    /**
-     * 获取Service Bean
-     */
-    IService<T> getServiceBean();
+public interface IController<PK extends Serializable, T, S extends IService<T>> {
 
     default RestVO<T> ok() {
         return new RestVO<T>().setCode(HttpStatus.OK.value()).setMsg("操作成功");

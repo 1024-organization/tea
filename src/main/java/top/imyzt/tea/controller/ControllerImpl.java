@@ -3,6 +3,8 @@ package top.imyzt.tea.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.IService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.imyzt.tea.bo.RestVO;
 import top.imyzt.tea.bo.TeaPage;
@@ -13,25 +15,28 @@ import java.io.Serializable;
 /**
  * Created by imyzt on 2018/11/21 15:04
  */
-public abstract class ControllerImpl<PK extends Serializable, T> implements IController<PK, T> {
+public abstract class ControllerImpl<PK extends Serializable, T, S extends IService<T>> implements IController<PK, T, S> {
+
+    @Autowired
+    protected S service;
 
     @Override
     @PostMapping
     public RestVO<T> insert(T entity) {
-        getServiceBean().insert(entity);
+        service.insert(entity);
         return ok();
     }
 
     @Override
     @GetMapping("{id}")
     public RestVO<T> selectById(@PathVariable PK id) {
-        return ok(getServiceBean().selectById(id));
+        return ok(service.selectById(id));
     }
 
     @Override
     @DeleteMapping("{id}")
     public RestVO<T> deleteById(@PathVariable PK id) {
-        if (getServiceBean().deleteById(id)) {
+        if (service.deleteById(id)) {
             return ok();
         }
         return fail();
@@ -40,7 +45,7 @@ public abstract class ControllerImpl<PK extends Serializable, T> implements ICon
     @Override
     @PutMapping
     public RestVO<T> updateById(T entity) {
-        if (getServiceBean().updateById(entity)) {
+        if (service.updateById(entity)) {
             return ok();
         }
         return fail();
@@ -52,7 +57,7 @@ public abstract class ControllerImpl<PK extends Serializable, T> implements ICon
                      @PathVariable(value = "isAsc", required = false) Boolean isAsc,
                      HttpServletRequest request) {
         Page<T> page = new Page<>(offset, limit, orderByField, isAsc);
-        Page<T> pageResult = getServiceBean().selectPage(page, teaPageWrapper(request));
+        Page<T> pageResult = service.selectPage(page, teaPageWrapper(request));
         TeaPage<T> teaPage = null;
         if (null != pageResult) {
             if (pageResult.getTotal() > 0) {

@@ -13,7 +13,4 @@ import top.imyzt.tea.service.UserService;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
-    @Autowired
-    private UserMapper userMapper;
-
 }

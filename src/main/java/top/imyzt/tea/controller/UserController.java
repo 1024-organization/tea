@@ -2,7 +2,6 @@ package top.imyzt.tea.controller;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.imyzt.tea.entity.User;
@@ -15,15 +14,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("user")
-public class UserController extends ControllerImpl<Integer, User> {
-
-    @Autowired
-    private UserService userService;
-
-    @Override
-    public UserService getServiceBean() {
-        return userService;
-    }
+public class UserController extends ControllerImpl<Integer, User, UserService> {
 
     @Override
     Wrapper<User> teaPageWrapper(HttpServletRequest request) {
